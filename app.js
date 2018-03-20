@@ -81,32 +81,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = e.target ;
             const li = button.parentNode;
             const ul = li.parentNode;
-            function removeName () {
-                ul.removeChild(li);
+            const nameActions = {
+                remove: () => {
+                    ul.removeChild(li);
+                },
+                edit: () => {
+                    const span = li.firstElementChild;
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = span.textContent;
+                    li.insertBefore(input, span);
+                    li.removeChild(span);
+                    button.textContent = 'save';
+                },
+                save: () => {
+                    const input = li.firstElementChild;
+                    const span = document.createElement('span');
+                    span.textContent = input.value;
+                    li.insertBefore(span, input);
+                    li.removeChild(input);
+                    button.textContent = 'edit';
+                }
             }
-            function editName () {
-                const span = li.firstElementChild;
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = span.textContent;
-                li.insertBefore(input, span);
-                li.removeChild(span);
-                button.textContent = 'save';
-            }
-            function saveName () {
-                const input = li.firstElementChild;
-                const span = document.createElement('span');
-                span.textContent = input.value;
-                li.insertBefore(span, input);
-                li.removeChild(input);
-                button.textContent = 'edit';
-            }
+
             if (button.textContent === 'remove') { 
-                removeName();
+                nameActions.remove();
             } else if  (button.textContent === 'edit') {
-                editName ();
+                nameActions.edit ();
             } else if (e.target.textContent === 'save') {
-                saveName ();
+                nameActions.save();
             }
         }
     });
